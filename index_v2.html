@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>荒野NPC · AI视觉创作作品集</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0e0b08;--bg-2:#1b1310;--bg-3:#261a15;
+  --fg:#ebe0c8;--fg-dim:#b4a08c;--fg-mute:#756050;
+  --accent:#c87a30;--accent-2:#d49040;--accent-glow:rgba(195,120,45,0.18);
+  --red:#743028;--purple:#5c3d5e;--border:rgba(195,125,50,0.22);
+  --serif:'Georgia','Times New Roman',serif;
+  --sans:'Helvetica Neue','Arial',sans-serif;
+}
+html{scroll-behavior:smooth;font-size:16px}
+body{background:var(--bg);color:var(--fg);font-family:var(--sans);line-height:1.6;overflow-x:hidden}
+img{display:block;max-width:100%;height:auto}
+a{color:inherit;text-decoration:none}
+section{position:relative}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--accent);border-radius:3px}
+
+/* Nav */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(13,10,8,0.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);transition:padding 0.3s}
+.nav-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem}
+.nav-logo{font-family:var(--serif);font-size:1.3rem;font-weight:bold;color:var(--accent);letter-spacing:2px}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{font-size:0.85rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--fg-dim);transition:color 0.3s;position:relative}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;right:0;height:1px;background:var(--accent);transform:scaleX(0);transition:transform 0.3s}
+.nav-links a:hover{color:var(--accent)}
+.nav-links a:hover::after{transform:scaleX(1)}
+.nav-burger{display:none;flex-direction:column;gap:4px;cursor:pointer;background:none;border:none}
+.nav-burger span{width:24px;height:2px;background:var(--accent);transition:0.3s}
+
+/* Hero */
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:url('assets/hero-bg_v2.jpg') center/cover no-repeat;filter:brightness(0.35) contrast(1.1) sepia(0.15);transform:scale(1.05);animation:heroZoom 20s ease-in-out infinite alternate}
+@keyframes heroZoom{from{transform:scale(1.05)}to{transform:scale(1.15)}}
+.hero-overlay{position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 0%,rgba(14,11,8,0.5) 40%,rgba(92,61,94,0.15) 60%,var(--bg) 100%),linear-gradient(to bottom,rgba(14,11,8,0.2) 0%,transparent 25%,rgba(200,122,48,0.05) 50%,transparent 75%,var(--bg) 100%)}
+.hero-content{position:relative;z-index:2;text-align:center;padding:0 2rem;max-width:900px}
+.hero-tag{display:inline-block;font-size:0.75rem;text-transform:uppercase;letter-spacing:4px;color:var(--accent);border:1px solid var(--border);padding:0.5rem 1.5rem;border-radius:2px;margin-bottom:2rem;background:var(--accent-glow)}
+.hero-title{font-family:var(--serif);font-size:clamp(3rem,8vw,6rem);font-weight:bold;line-height:1.1;color:var(--fg);text-shadow:0 4px 30px rgba(0,0,0,0.8);margin-bottom:1rem}
+.hero-title .accent{color:var(--accent);font-style:italic}
+.hero-sub{font-size:clamp(1rem,2vw,1.3rem);color:var(--fg-dim);letter-spacing:1px;margin-bottom:3rem;font-weight:300}
+.hero-cta{display:inline-flex;align-items:center;gap:0.8rem;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:var(--bg);font-size:0.85rem;font-weight:bold;text-transform:uppercase;letter-spacing:2px;padding:1rem 2.5rem;border-radius:2px;transition:all 0.3s;border:none;cursor:pointer}
+.hero-cta:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(200,150,90,0.4)}
+.hero-cta svg{width:16px;height:16px}
+.hero-scroll{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);color:var(--fg-mute);font-size:0.75rem;letter-spacing:2px;text-transform:uppercase;display:flex;flex-direction:column;align-items:center;gap:0.5rem}
+.hero-scroll .line{width:1px;height:40px;background:linear-gradient(to bottom,var(--accent),transparent);animation:scrollLine 2s ease-in-out infinite}
+@keyframes scrollLine{0%,100%{opacity:0.3}50%{opacity:1}}
+
+/* Section common */
+.section{padding:6rem 2rem;max-width:1400px;margin:0 auto}
+.section-header{text-align:center;margin-bottom:4rem}
+.section-label{font-size:0.75rem;text-transform:uppercase;letter-spacing:4px;color:var(--accent);margin-bottom:1rem}
+.section-title{font-family:var(--serif);font-size:clamp(2rem,4vw,3.2rem);font-weight:bold;color:var(--fg);margin-bottom:1rem}
+.section-desc{font-size:1rem;color:var(--fg-dim);max-width:600px;margin:0 auto}
+
+/* About */
+.about{background:linear-gradient(to bottom,var(--bg) 0%,var(--bg-2) 100%)}
+.about-grid{display:grid;grid-template-columns:1fr 1.5fr;gap:4rem;align-items:center}
+.about-img{position:relative;border-radius:4px;overflow:hidden;border:1px solid var(--border)}
+.about-img img{width:100%;aspect-ratio:3/4;object-fit:cover;filter:sepia(0.1) contrast(1.05)}
+.about-img::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent 60%,rgba(200,150,90,0.1) 100%)}
+.about-text h3{font-family:var(--serif);font-size:1.8rem;margin-bottom:1.5rem;color:var(--fg)}
+.about-text p{color:var(--fg-dim);margin-bottom:1.2rem;font-size:1.05rem}
+.about-stats{display:flex;gap:2rem;margin-top:2rem;flex-wrap:wrap}
+.stat{text-align:left}
+.stat-num{font-family:var(--serif);font-size:2.5rem;font-weight:bold;color:var(--accent);line-height:1}
+.stat-label{font-size:0.8rem;color:var(--fg-mute);text-transform:uppercase;letter-spacing:1px;margin-top:0.3rem}
+
+/* Artwork */
+.artwork{background:var(--bg-2)}
+.artwork-featured{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-bottom:4rem}
+.art-card{position:relative;border-radius:4px;overflow:hidden;border:1px solid var(--border);background:var(--bg-3);cursor:pointer}
+.art-card img{width:100%;aspect-ratio:16/10;object-fit:cover;transition:transform 0.6s}
+.art-card:hover img{transform:scale(1.05)}
+.art-card-overlay{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(13,10,8,0.95) 0%,transparent 100%);padding:2rem 1.5rem 1.5rem}
+.art-card-tag{font-size:0.7rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:0.5rem}
+.art-card-title{font-family:var(--serif);font-size:1.3rem;color:var(--fg)}
+
+/* Workflow */
+.workflow{background:var(--bg)}
+.workflow-showcase{position:relative;border-radius:4px;overflow:hidden;border:1px solid var(--border);margin-bottom:3rem;cursor:pointer}
+.workflow-showcase img{width:100%;transition:transform 0.6s}
+.workflow-showcase:hover img{transform:scale(1.03)}
+.workflow-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem}
+.workflow-step{background:var(--bg-3);border:1px solid var(--border);border-radius:4px;padding:2rem 1.5rem;transition:all 0.3s}
+.workflow-step:hover{border-color:var(--accent);transform:translateY(-4px)}
+.workflow-step-num{font-family:var(--serif);font-size:2rem;color:var(--accent);margin-bottom:0.5rem}
+.workflow-step h4{font-family:var(--serif);font-size:1.1rem;color:var(--fg);margin-bottom:0.5rem}
+.workflow-step p{font-size:0.85rem;color:var(--fg-mute)}
+
+/* Gallery */
+.gallery{background:linear-gradient(to bottom,var(--bg-2) 0%,var(--bg) 100%)}
+.gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem}
+.gallery-item{position:relative;border-radius:4px;overflow:hidden;border:1px solid var(--border);cursor:pointer;background:var(--bg-3)}
+.gallery-item img{width:100%;aspect-ratio:4/3;object-fit:cover;transition:transform 0.5s,filter 0.3s}
+.gallery-item:hover img{transform:scale(1.08);filter:brightness(1.1)}
+.gallery-item-num{position:absolute;top:0.8rem;left:0.8rem;background:rgba(13,10,8,0.8);color:var(--accent);font-family:var(--serif);font-size:0.85rem;padding:0.3rem 0.8rem;border-radius:2px;border:1px solid var(--border)}
+.gallery-item-overlay{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(13,10,8,0.9),transparent);padding:1.5rem 1rem 1rem;opacity:0;transition:opacity 0.3s}
+.gallery-item:hover .gallery-item-overlay{opacity:1}
+.gallery-item-desc{font-size:0.85rem;color:var(--fg-dim)}
+
+/* Script Table */
+.script-section{background:var(--bg-2)}
+.script-screenshots{display:flex;flex-direction:column;gap:1.5rem;margin-bottom:3rem}
+.script-screenshot{position:relative;border-radius:4px;overflow:hidden;border:1px solid var(--border);cursor:pointer}
+.script-screenshot img{width:100%;transition:transform 0.5s}
+.script-screenshot:hover img{transform:scale(1.02)}
+.script-screenshot-tag{position:absolute;top:1rem;left:1rem;background:rgba(13,10,8,0.85);color:var(--accent);font-size:0.75rem;padding:0.4rem 1rem;border-radius:2px;border:1px solid var(--border);letter-spacing:1px}
+.script-table{width:100%;border-collapse:collapse;margin-top:1rem;font-size:0.85rem;overflow:hidden;border-radius:4px;border:1px solid var(--border)}
+.script-table thead{background:var(--bg-3)}
+.script-table th{padding:1rem;text-align:left;color:var(--accent);font-size:0.75rem;text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid var(--border)}
+.script-table td{padding:1rem;color:var(--fg-dim);border-bottom:1px solid var(--border);vertical-align:top;line-height:1.6}
+.script-table tr:hover td{background:rgba(200,150,90,0.03)}
+.script-table .shot-num{font-family:var(--serif);color:var(--accent);font-weight:bold;font-size:1rem}
+.script-table .time-code{font-family:monospace;color:var(--accent-2);font-size:0.8rem;white-space:nowrap}
+.script-table .ai-prompt{color:var(--fg-mute);font-style:italic;font-size:0.8rem}
+
+/* Lightbox */
+.lightbox{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.92);display:flex;align-items:center;justify-content:center;padding:2rem;opacity:0;visibility:hidden;transition:opacity 0.3s,visibility 0.3s}
+.lightbox.active{opacity:1;visibility:visible}
+.lightbox img{max-width:90%;max-height:85vh;border-radius:4px;border:1px solid var(--border)}
+.lightbox-close{position:absolute;top:1.5rem;right:2rem;color:var(--fg);font-size:2rem;cursor:pointer;background:none;border:none;transition:color 0.3s}
+.lightbox-close:hover{color:var(--accent)}
+.lightbox-nav{position:absolute;top:50%;transform:translateY(-50%);color:var(--fg-dim);font-size:2.5rem;cursor:pointer;background:none;border:none;padding:1rem;transition:color 0.3s}
+.lightbox-nav:hover{color:var(--accent)}
+.lightbox-prev{left:1rem}
+.lightbox-next{right:1rem}
+
+/* Video */
+.video-section{background:var(--bg)}
+.video-wrapper{position:relative;border-radius:4px;overflow:hidden;border:1px solid var(--border);max-width:1000px;margin:0 auto}
+.video-wrapper img{width:100%;aspect-ratio:16/9;object-fit:cover;filter:brightness(0.5)}
+.video-play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:80px;height:80px;border-radius:50%;background:rgba(200,150,90,0.9);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.3s;border:none}
+.video-play:hover{background:var(--accent);transform:translate(-50%,-50%) scale(1.1)}
+.video-play svg{width:30px;height:30px;color:var(--bg);margin-left:4px}
+.video-info{text-align:center;margin-top:2rem}
+.video-info h3{font-family:var(--serif);font-size:1.5rem;color:var(--fg);margin-bottom:0.5rem}
+.video-info p{color:var(--fg-dim);font-size:0.95rem}
+
+/* Skills */
+.skills{background:var(--bg-2)}
+.skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.5rem}
+.skill-card{background:var(--bg-3);border:1px solid var(--border);border-radius:4px;padding:2rem 1.5rem;text-align:center;transition:all 0.3s}
+.skill-card:hover{border-color:var(--accent);transform:translateY(-4px);box-shadow:0 10px 30px rgba(0,0,0,0.4)}
+.skill-icon{font-size:2rem;margin-bottom:1rem}
+.skill-name{font-family:var(--serif);font-size:1.1rem;color:var(--fg);margin-bottom:0.5rem}
+.skill-desc{font-size:0.85rem;color:var(--fg-mute)}
+
+/* Contact */
+.contact{background:linear-gradient(to bottom,var(--bg-2) 0%,var(--bg) 100%);text-align:center;padding:8rem 2rem}
+.contact-cta{font-family:var(--serif);font-size:clamp(2rem,4vw,3rem);color:var(--fg);margin-bottom:1rem}
+.contact-desc{color:var(--fg-dim);margin-bottom:3rem;font-size:1.1rem}
+.contact-btn{display:inline-flex;align-items:center;gap:0.8rem;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:var(--bg);font-size:0.9rem;font-weight:bold;text-transform:uppercase;letter-spacing:2px;padding:1.2rem 3rem;border-radius:2px;transition:all 0.3s;border:none;cursor:pointer}
+.contact-btn:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(200,150,90,0.4)}
+
+/* Footer */
+.footer{background:var(--bg);border-top:1px solid var(--border);padding:2rem;text-align:center}
+.footer p{font-size:0.8rem;color:var(--fg-mute);letter-spacing:1px}
+
+/* Animations */
+.fade-up{opacity:0;transform:translateY(30px);transition:opacity 0.8s,transform 0.8s}
+.fade-up.visible{opacity:1;transform:translateY(0)}
+
+/* Responsive */
+@media(max-width:768px){
+  .nav-links{display:none}.nav-burger{display:flex}
+  .about-grid{grid-template-columns:1fr;gap:2rem}
+  .artwork-featured{grid-template-columns:1fr}
+  .section{padding:4rem 1.5rem}
+  .gallery-grid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
+  .workflow-steps{grid-template-columns:1fr 1fr}
+  .script-table{font-size:0.75rem}
+  .script-table th,.script-table td{padding:0.6rem}
+}
+@media(max-width:600px){
+  .workflow-steps{grid-template-columns:1fr}
+  .script-table-wrap{overflow-x:auto}
+}
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-logo">荒野NPC</div>
+    <ul class="nav-links">
+      <li><a href="#about">关于</a></li>
+      <li><a href="#artwork">AI创作</a></li>
+      <li><a href="#workflow">生成流程</a></li>
+      <li><a href="#gallery">分镜图</a></li>
+      <li><a href="#script">分镜脚本</a></li>
+      <li><a href="#video">视频</a></li>
+      <li><a href="#skills">技能</a></li>
+      <li><a href="#contact">联系</a></li>
+    </ul>
+    <button class="nav-burger" id="navBurger"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero" id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <span class="hero-tag">AI Visual Creator</span>
+    <h1 class="hero-title">荒野<span class="accent">NPC</span></h1>
+    <p class="hero-sub">AI视觉创作 · 影视分镜设计 · 新媒体运营</p>
+    <button class="hero-cta" onclick="document.getElementById('artwork').scrollIntoView({behavior:'smooth'})">探索作品<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+  </div>
+  <div class="hero-scroll"><span>SCROLL</span><div class="line"></div></div>
+</section>
+
+<!-- About -->
+<section class="section about" id="about">
+  <div class="section-header fade-up"><div class="section-label">ABOUT</div><h2 class="section-title">关于我</h2></div>
+  <div class="about-grid">
+    <div class="about-img fade-up"><img src="assets/extracted_850ab91b.png" alt="角色设定参考图"></div>
+    <div class="about-text fade-up">
+      <h3>荒野NPC · AI视觉创作</h3>
+      <p>视频脚本自制，画面以及视频生成使用AI软件。以《荒野大镖客2》主角Arthur Morgan的命运为灵感，构建了一套角色设定与视觉分镜体系，主角人称视角介绍。</p>
+      <p>同时运营新媒体账号"山川回响"，将AI视觉创作与文旅内容相结合，探索技术与内容的交叉表达。</p>
+      <div class="about-stats">
+        <div class="stat"><div class="stat-num">17</div><div class="stat-label">分镜场景</div></div>
+        <div class="stat"><div class="stat-num">5</div><div class="stat-label">分镜脚本</div></div>
+        <div class="stat"><div class="stat-num">1</div><div class="stat-label">视频作品</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AI Artwork -->
+<section class="section artwork" id="artwork">
+  <div class="section-header fade-up"><div class="section-label">AI ARTWORK</div><h2 class="section-title">AI视觉创作</h2><p class="section-desc">以Red Dead Redemption 2为灵感，通过AI生成的角色设定与影视级场景插画</p></div>
+  <div class="artwork-featured">
+    <div class="art-card fade-up" onclick="openLightbox(0,'assets/extracted_7c65fe68.jpg')">
+      <img src="assets/extracted_7c65fe68.jpg" alt="Arthur Morgan 酒馆对峙">
+      <div class="art-card-overlay"><div class="art-card-tag">Key Visual</div><div class="art-card-title">Arthur Morgan · 酒馆对峙</div></div>
+    </div>
+    <div class="art-card fade-up" onclick="openLightbox(1,'assets/extracted_850ab91b.png')">
+      <img src="assets/extracted_850ab91b.png" alt="角色三视图设定">
+      <div class="art-card-overlay"><div class="art-card-tag">Character Design</div><div class="art-card-title">Arthur Morgan · 角色三视图</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- AI Workflow -->
+<section class="section workflow" id="workflow">
+  <div class="section-header fade-up">
+    <div class="section-label">AI WORKFLOW</div>
+    <h2 class="section-title">AI生成流程</h2>
+    <p class="section-desc">从角色设定到场景构建，通过节点化资产管理画布串联整个AI创作链路</p>
+  </div>
+  <div class="workflow-showcase fade-up" onclick="openLightbox(2,'assets/extracted_6e8474b9.png')">
+    <img src="assets/extracted_6e8474b9.png" alt="AI生成流程资产管理画布" loading="lazy">
+  </div>
+  <div class="workflow-steps">
+    <div class="workflow-step fade-up">
+      <div class="workflow-step-num">01</div>
+      <h4>角色节点</h4>
+      <p>建立Arthur Morgan角色三视图设定，作为所有场景生成的人物基础参考</p>
+    </div>
+    <div class="workflow-step fade-up">
+      <div class="workflow-step-num">02</div>
+      <h4>场景节点</h4>
+      <p>构建沙漠、酒馆、旷野等环境节点，与角色节点关联生成情境画面</p>
+    </div>
+    <div class="workflow-step fade-up">
+      <div class="workflow-step-num">03</div>
+      <h4>道具节点</h4>
+      <p>武器（左轮手枪）、酒杯、马匹等道具设定，增强画面细节与叙事真实感</p>
+    </div>
+    <div class="workflow-step fade-up">
+      <div class="workflow-step-num">04</div>
+      <h4>分镜输出</h4>
+      <p>将各节点组合为完整分镜场景，配合AI提示词生成最终影视级画面</p>
+    </div>
+  </div>
+</section>
+
+<!-- Storyboard Gallery -->
+<section class="section gallery" id="gallery">
+  <div class="section-header fade-up">
+    <div class="section-label">STORYBOARD</div>
+    <h2 class="section-title">分镜图集</h2>
+    <p class="section-desc">荒野NPC项目完整分镜，涵盖对峙、枪战、酒馆冲突等核心叙事场景</p>
+  </div>
+  <div class="gallery-grid" id="galleryGrid"></div>
+</section>
+
+<!-- Storyboard Script -->
+<section class="section script-section" id="script">
+  <div class="section-header fade-up">
+    <div class="section-label">SCRIPT</div>
+    <h2 class="section-title">分镜脚本</h2>
+    <p class="section-desc">"我叫亚瑟摩根" — 完整分镜脚本，包含镜头时间码、景别、构图、台词、音效与AI提示词</p>
+  </div>
+  <div class="script-screenshots">
+    <div class="script-screenshot fade-up" onclick="openLightbox(3,'assets/extracted_0b5df524.png')">
+      <span class="script-screenshot-tag">分镜脚本 · 镜头01-03</span>
+      <img src="assets/extracted_0b5df524.png" alt="分镜脚本 镜头1-3" loading="lazy">
+    </div>
+    <div class="script-screenshot fade-up" onclick="openLightbox(4,'assets/extracted_d718e886.png')">
+      <span class="script-screenshot-tag">分镜脚本 · 镜头04-05</span>
+      <img src="assets/extracted_d718e886.png" alt="分镜脚本 镜头4-5" loading="lazy">
+    </div>
+  </div>
+  <div class="fade-up">
+    <div class="script-table-wrap" style="overflow-x:auto">
+    <table class="script-table">
+      <thead>
+        <tr>
+          <th>镜头</th><th>时间</th><th>景别</th><th>构图与画面</th><th>台词/旁白</th><th>音效</th><th>AI提示词</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="shot-num">01</td><td class="time-code">00:00-00:03</td><td>—</td>
+          <td>黑屏</td><td>无</td>
+          <td>一声震耳欲聋的左轮枪响，带有西部荒漠的回声</td>
+          <td class="ai-prompt">纯黑屏，无需AI生成</td>
+        </tr>
+        <tr>
+          <td class="shot-num">02</td><td class="time-code">00:03-00:08</td><td>中全景</td>
+          <td>画面猛然亮起。一个亡命之徒的背影在刺目阳光下缓缓跪倒、扑地，尘土飞扬。</td>
+          <td>旁白（亚瑟粗粝疲惫的声音）："我叫亚瑟·摩根。我是个亡命之徒，一个杀手，一个赏金猎人。听起来就感觉酷爆了。"</td>
+          <td>身体倒地的闷响，风声，枪响余音</td>
+          <td class="ai-prompt">Cinematic wide shot of a dying outlaw seen from behind, collapsing in dust under harsh desert sunlight, Western film grain, photorealistic</td>
+        </tr>
+        <tr>
+          <td class="shot-num">03</td><td class="time-code">00:08-00:15</td><td>大特写</td>
+          <td>镜头缓缓推近，焦点落在亚瑟·摩根持枪的手和枪口。枪口青烟袅袅，背景虚化，隐约可见倒下的身体。</td>
+          <td>旁白继续</td>
+          <td>细微的滋滋烟声，远处秃鹰的叫声</td>
+          <td class="ai-prompt">Extreme close-up of a vintage revolver barrel, smoke curling from the muzzle, shallow depth of field, gritty texture, cinematic western lighting, slow motion smoke</td>
+        </tr>
+        <tr>
+          <td class="shot-num">04</td><td class="time-code">00:15-00:22</td><td>中景</td>
+          <td>快节奏混剪。亚瑟策马追上驿马车，身体探出，持枪对准车夫，背景是飞奔的旷野。</td>
+          <td>旁白："抢劫、杀人、被通缉、交赎金……再抢劫、再杀人。"</td>
+          <td>急促的马蹄声，枪栓拉动的金属声</td>
+          <td class="ai-prompt">Action shot of a cowboy on horseback robbing a stagecoach, pointing a gun, dust trail, intense motion blur, western movie style</td>
+        </tr>
+        <tr>
+          <td class="shot-num">05</td><td class="time-code">00:22-00:28</td><td>中全景</td>
+          <td>枪林弹雨。亚瑟以大树为掩体，探身向前方开火。子弹打在树干上，木屑飞溅。</td>
+          <td>旁白继续</td>
+          <td>枪声连发，木屑断裂声，喘息声</td>
+          <td class="ai-prompt">Arthur Morgan in a frantic gunfight, firing from behind a tree, Pinkertons returning fire, wood splinters, highly detailed, cinematic chaos</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+</section>
+
+<!-- Video -->
+<section class="section video-section" id="video">
+  <div class="section-header fade-up"><div class="section-label">VIDEO</div><h2 class="section-title">视频作品</h2><p class="section-desc">荒野NPC · AI视觉短片</p></div>
+  <div class="video-wrapper fade-up"><video controls preload="metadata" style="width:100%;aspect-ratio:16/9;object-fit:cover;background:#000"><source src="assets/wildnpc_video.mp4" type="video/mp4">您的浏览器不支持视频播放</video></div>
+  <div class="video-info"><h3>荒野NPC · 6月26日导出版</h3><p>基于AI生成的分镜素材制作的视频，以西部角色Arthur Morgan为主角</p></div>
+</section>
+
+<!-- Skills -->
+<section class="section skills" id="skills">
+  <div class="section-header fade-up"><div class="section-label">SKILLS</div><h2 class="section-title">技能矩阵</h2></div>
+  <div class="skills-grid">
+    <div class="skill-card fade-up"><div class="skill-icon">🎬</div><div class="skill-name">分镜设计</div><div class="skill-desc">影视分镜叙事 / 角色设定 / 场景构建</div></div>
+    <div class="skill-card fade-up"><div class="skill-icon">📱</div><div class="skill-name">新媒体运营</div><div class="skill-desc">小红书"山川回响" · 文旅内容创作</div></div>
+    <div class="skill-card fade-up"><div class="skill-icon">🖥️</div><div class="skill-name">设计工具</div><div class="skill-desc">Photoshop / Premiere Pro / 剪映</div></div>
+    <div class="skill-card fade-up"><div class="skill-icon">🎭</div><div class="skill-name">剧本创作</div><div class="skill-desc">亚瑟摩根剧本大纲 / 荒野NPC系列</div></div>
+    <div class="skill-card fade-up"><div class="skill-icon">🗺️</div><div class="skill-name">文旅策划</div><div class="skill-desc">新疆伊犁/阿勒泰旅游广告设计</div></div>
+  </div>
+</section>
+
+<!-- Contact -->
+<section class="section contact" id="contact">
+  <div class="fade-up">
+    <h2 class="contact-cta">让我们一起创作</h2>
+    <p class="contact-desc">无论是AI视觉创作、分镜设计还是新媒体内容合作，欢迎随时联系</p>
+    <button class="contact-btn" onclick="window.location.href='mailto:siccatang@qq.com'">联系我<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer"><p>© 2026 荒野NPC · AI Visual Creative Portfolio</p></footer>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightboxClose">&times;</button>
+  <button class="lightbox-nav lightbox-prev" id="lightboxPrev">&#8249;</button>
+  <img id="lightboxImg" src="" alt="">
+  <button class="lightbox-nav lightbox-next" id="lightboxNext">&#8250;</button>
+</div>
+
+<script>
+const storyboards = [
+  {src:'image_1782725157662_wtsjp2d.png',desc:'荒野对峙 · 沙漠枪战'},
+  {src:'image_1782725157663_pig82qn.png',desc:'角色特写 · 持枪肖像'},
+  {src:'image_1782725157664_xnllyxw.png',desc:'场景氛围 · 黄昏荒野'},
+  {src:'image_1782725157666_5yte39z.png',desc:'动作场景 · 骑马追逐'},
+  {src:'image_1782725157667_mv0vx3l.png',desc:'环境设定 · 荒野小镇'},
+  {src:'image_1782725157669_xomm0ht.png',desc:'人物群像 · 酒馆内景'},
+  {src:'image_1782725157670_ocxq0nw_v2.png',desc:'冲突场景 · 酒馆斗殴'},
+  {src:'image_1782725157672_p7d03r7_v2.png',desc:'叙事分镜 · 对话场景'},
+  {src:'image_1782725157675_pynz5ot_v2.png',desc:'视觉氛围 · 夜间场景'},
+  {src:'image_1782725157677_f7qd47i.png',desc:'角色动态 · 战斗姿态'},
+  {src:'image_1782725157678_6jazcj5.png',desc:'场景过渡 · 荒野远景'},
+  {src:'image_1782725157680_2gcxf70.png',desc:'情绪表达 · 角色独白'},
+  {src:'image_1782725157682_587pxsq.png',desc:'动作连续 · 拔枪瞬间'},
+  {src:'image_1782725157683_gavmb9b.png',desc:'环境叙事 · 沙尘风暴'},
+  {src:'image_1782725157685_dosqdp2.png',desc:'角色互动 · 双人对峙'},
+  {src:'image_1782725157687_vxnauzo.png',desc:'视觉高潮 · 最终对决'},
+  {src:'image_1782725157688_d2l1n2j.png',desc:'结尾画面 · 荒野余晖'},
+];
+
+const allImages = [
+  'assets/gallery_01.jpg',
+  'assets/gallery_02.png',
+  'assets/gallery_03.png',
+  'assets/gallery_04.png',
+  'assets/gallery_05.png',
+  ...storyboards.map(s => 'assets/' + s.src)
+];
+
+const galleryGrid = document.getElementById('galleryGrid');
+storyboards.forEach((sb, i) => {
+  const item = document.createElement('div');
+  item.className = 'gallery-item fade-up';
+  item.onclick = () => openLightbox(i + 5, 'assets/' + sb.src);
+  item.innerHTML = '<img src="assets/' + sb.src + '" alt="' + sb.desc + '" loading="lazy"><div class="gallery-item-num">' + String(i+1).padStart(2,'0') + '</div><div class="gallery-item-overlay"><div class="gallery-item-desc">' + sb.desc + '</div></div>';
+  galleryGrid.appendChild(item);
+});
+
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = document.getElementById('lightboxImg');
+let currentIdx = 0;
+function openLightbox(idx, src){ currentIdx = idx; lightboxImg.src = src; lightbox.classList.add('active'); document.body.style.overflow = 'hidden'; }
+function closeLightbox(){ lightbox.classList.remove('active'); document.body.style.overflow = ''; }
+function navLightbox(dir){ currentIdx = (currentIdx + dir + allImages.length) % allImages.length; lightboxImg.src = allImages[currentIdx]; }
+document.getElementById('lightboxClose').onclick = closeLightbox;
+document.getElementById('lightboxPrev').onclick = (e) => { e.stopPropagation(); navLightbox(-1); };
+document.getElementById('lightboxNext').onclick = (e) => { e.stopPropagation(); navLightbox(1); };
+lightbox.onclick = (e) => { if(e.target === lightbox) closeLightbox(); };
+document.addEventListener('keydown', (e) => {
+  if(!lightbox.classList.contains('active')) return;
+  if(e.key === 'Escape') closeLightbox();
+  if(e.key === 'ArrowLeft') navLightbox(-1);
+  if(e.key === 'ArrowRight') navLightbox(1);
+});
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => { if(entry.isIntersecting) entry.target.classList.add('visible'); });
+}, {threshold: 0.1});
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+document.getElementById('navBurger').onclick = function(){
+  const links = document.querySelector('.nav-links');
+  if(links.style.display === 'flex'){ links.style.display = 'none'; }
+  else { links.style.display = 'flex'; links.style.flexDirection = 'column'; links.style.position = 'absolute'; links.style.top = '100%'; links.style.right = '2rem'; links.style.background = 'rgba(13,10,8,0.95)'; links.style.padding = '1rem 2rem'; links.style.borderRadius = '4px'; links.style.border = '1px solid var(--border)'; }
+};
+</script>
+</body>
+</html>
